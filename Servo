@@ -1,0 +1,39 @@
+#define BLYNK_TEMPLATE_ID "xx"
+#define BLYNK_TEMPLATE_NAME "Servo Motor"
+#define BLYNK_PRINT Serial
+#include <WiFi.h>
+#include <WiFiClient.h>                // i didnt fill in templete id and auth for obvious reasons 
+#include <BlynkSimpleEsp32.h>
+#include <ESP32Servo.h>
+
+Servo myServo;
+
+char auth[] = "xx";    // Blynk auth token
+char ssid[] = "";      // Wi-Fi SSID
+char pass[] = "";    // Wi-Fi password
+
+void setup() {
+  Serial.begin(9600);
+  myServo.attach(18);
+
+  // Connect to Blynk Cloud
+  Blynk.begin(auth, ssid, pass, "blynk.cloud", 80);
+
+  Serial.println("Ready! Move the slider on V0 to control the servo.");
+}
+
+// Blynk slider (Virtual Pin V0) controls servo angle
+BLYNK_WRITE(V0) {
+  int angle = param.asInt();   // Read value from slider (0–180)
+  myServo.write(angle);        
+  Serial.print("Servo angle: ");
+  Serial.println(angle);
+}
+
+void loop() {
+  Blynk.run();
+}
+
+// pin 18 to orange 
+// 5v to red
+// ground to brown
